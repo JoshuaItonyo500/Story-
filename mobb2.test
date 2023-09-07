@@ -1,0 +1,23 @@
+- name: Mobb action step
+  uses: mobb-dev/action@v1
+  with:
+    report-file: "/home/runner/report.json"
+    api-key: ${{ secrets.MOBB_API_TOKEN }}
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    # Define actions based on Snyk scan results
+    actions: |
+      - name: Create GitHub Issue
+        type: github-issue
+        condition: result.numSecurityVulnerabilities > 0
+        title: Security Vulnerabilities Detected
+        body: |
+          Security vulnerabilities have been detected in the code. Please review the scan results.
+          Snyk Scan Results: ${{ secrets.SNYK_SCAN_URL }}
+        labels: security
+
+      - name: Comment on Pull Request
+        type: github-comment
+        condition: result.numSecurityVulnerabilities > 0
+        message: |
+          Security vulnerabilities have been detected in this pull request. Please review the scan results.
+          Snyk Scan Results: ${{ secrets.SNYK_SCAN_URL }}
