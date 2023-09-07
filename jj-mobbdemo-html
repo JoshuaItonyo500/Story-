@@ -1,0 +1,10 @@
+var urlParams = new URLSearchParams(window.location.search);
+var name = urlParams.get('name');
+
+var unsafe_div = window.document.getElementById("vulnerable-div");
+if (name !== null) {
+  unsafe_div.textContent = name;
+} else {
+  // Handle the case when 'name' is not in the URL
+  unsafe_div.textContent = "Default Value"; // or any other appropriate action
+}
